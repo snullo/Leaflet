@@ -40,10 +40,12 @@ export var Marker = Layer.extend({
 
 		// @option title: String = ''
 		// Text for the browser tooltip that appear on marker hover (no tooltip by default).
+		// [Useful for accessibility](https://leafletjs.com/examples/accessibility/#markers-must-be-labelled).
 		title: '',
 
 		// @option alt: String = 'Marker'
-		// Text for the `alt` attribute of the icon image (useful for accessibility).
+		// Text for the `alt` attribute of the icon image.
+		// [Useful for accessibility](https://leafletjs.com/examples/accessibility/#markers-must-be-labelled).
 		alt: 'Marker',
 
 		// @option zIndexOffset: Number = 0
@@ -389,8 +391,8 @@ export var Marker = Layer.extend({
 		if (!map) { return; }
 
 		var iconOpts = this.options.icon.options;
-		var size = point(iconOpts.iconSize);
-		var anchor = point(iconOpts.iconAnchor);
+		var size = iconOpts.iconSize ? point(iconOpts.iconSize) : point(0, 0);
+		var anchor = iconOpts.iconAnchor ? point(iconOpts.iconAnchor) : point(0, 0);
 
 		map.panInside(this._latlng, {
 			paddingTopLeft: anchor,

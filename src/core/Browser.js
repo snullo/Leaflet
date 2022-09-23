@@ -146,23 +146,17 @@ var canvas = (function () {
 // `true` when the browser supports [SVG](https://developer.mozilla.org/docs/Web/SVG).
 var svg = !!(document.createElementNS && svgCreate('svg').createSVGRect);
 
-// @property vml: Boolean
-// `true` if the browser supports [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language).
-var vml = !svg && (function () {
-	try {
-		var div = document.createElement('div');
-		div.innerHTML = '<v:shape adj="1"/>';
+var inlineSvg = !!svg && (function () {
+	var div = document.createElement('div');
+	div.innerHTML = '<svg/>';
+	return (div.firstChild && div.firstChild.namespaceURI) === 'http://www.w3.org/2000/svg';
+})();
 
-		var shape = div.firstChild;
-		shape.style.behavior = 'url(#default#VML)';
+// @property mac: Boolean; `true` when the browser is running in a Mac platform
+var mac = navigator.platform.indexOf('Mac') === 0;
 
-		return shape && (typeof shape.adj === 'object');
-
-	} catch (e) {
-		return false;
-	}
-}());
-
+// @property mac: Boolean; `true` when the browser is running in a Linux platform
+var linux = navigator.platform.indexOf('Linux') === 0;
 
 function userAgentContains(str) {
 	return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
@@ -201,5 +195,7 @@ export default {
 	passiveEvents: passiveEvents,
 	canvas: canvas,
 	svg: svg,
-	vml: vml,
+	inlineSvg: inlineSvg,
+	mac: mac,
+	linux: linux
 };
